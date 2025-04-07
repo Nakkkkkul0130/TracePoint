@@ -46,3 +46,9 @@ npm run dev
 
 
 Open your browser and go to: http://localhost:5173
+
+## 🌍 Live Demo
+
+Check out the live deployed version here:  
+🔗 [https://tracepoint.vercel.app](https://tracepoint.vercel.app)
+
