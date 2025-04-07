@@ -79,7 +79,7 @@ export default function About() {
               {[
                 {
                   name: "Lost & Found Hub",
-                  link: "https://github.com/nakul-kasana/lost-found-hub",
+                  link: "https://github.com/Nakkkkkul0130/TracePoint",
                   image: Lost,
                 },
                 {
