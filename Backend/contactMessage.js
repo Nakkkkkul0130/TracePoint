@@ -1,0 +1,14 @@
+const mongoose = require("mongoose");
+
+const contactSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String,
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+// ✅ Prevent OverwriteModelError
+module.exports = mongoose.models.contactMessage || mongoose.model("contactMessage", contactSchema);
