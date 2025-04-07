@@ -37,7 +37,4 @@
 git clone https://github.com/Nakkkkkul0130/TracePoint
 cd tracepoint
 
-2. **Install dependencies:**
-```bash
-npm install
 
