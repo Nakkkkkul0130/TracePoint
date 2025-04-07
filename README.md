@@ -38,3 +38,11 @@ git clone https://github.com/Nakkkkkul0130/TracePoint
 cd tracepoint
 
 
+2.Install all dependencies:
+npm install
+
+3.Start the development server:
+npm run dev
+
+
+Open your browser and go to: http://localhost:5173
