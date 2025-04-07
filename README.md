@@ -1,13 +1,38 @@
-# React + Vite
+# 🌐 TracePoint
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**TracePoint** is a modern and responsive Lost & Found web application built with **React**, **Vite**, **Tailwind CSS**, and **Framer Motion**. It helps users report lost items and view found ones with a clean and interactive UI. 🧳🔍
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 📝 Report Lost Items with image upload and form validation  
+- 👀 View Found Items with image preview  
+- ✅ Claim Verification system for found items  
+- 🔒 User Authentication with `localStorage`  
+- 🌗 Light/Dark Theme support using Tailwind  
+- 💫 Smooth animations using Framer Motion  
+- 📂 Persistent data storage (localStorage + MongoDB in backend version)  
+- 📧 Contact form with Nodemailer + MongoDB (in backend)  
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
 
+## 🚀 Tech Stack
+
+- ⚛️ React (Vite)  
+- 🎨 Tailwind CSS  
+- 🎥 Framer Motion  
+- 🌐 React Router  
+- 🧠 localStorage (for login/auth)  
+- 📦 MongoDB (backend support for login/signup if logged in then only report lost item and for email persistence)  
+- ✉️ Nodemailer (for contact form)  
+
+---
+
+## 🔧 Installation & Setup
+
+1. **Clone the repo:**
+
+```bash
+git clone https://github.com/Nakkkkkul0130/TracePoint
+cd tracepoint
