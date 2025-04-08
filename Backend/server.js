@@ -9,7 +9,10 @@ const emailRoutes = require("./emailService"); // ✅ it's a router!
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // for testing, allow all origins
+  credentials: true
+}));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
