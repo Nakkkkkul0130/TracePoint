@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,7 +31,7 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/send-email", {
+      const response = await fetch(`${BASE_URL}/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
