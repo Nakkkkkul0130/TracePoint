@@ -10,7 +10,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: "https://trace-point.vercel.app/", // for testing, allow all origins
+  origin: "https://trace-point.vercel.app", // for testing, allow all origins
   credentials: true
 }));
 app.use(express.json());
