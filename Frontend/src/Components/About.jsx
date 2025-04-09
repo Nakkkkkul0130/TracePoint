@@ -116,7 +116,7 @@ export default function About() {
             <div className="mt-10 flex justify-center">
               <motion.a
                 whileHover={{ scale: 1.05 }}
-                href="/nakul updated cv3.pdf"
+                href="/nakul bhar updated cv1.pdf"
                 download
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2"
               >
