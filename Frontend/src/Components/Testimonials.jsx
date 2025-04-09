@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Import images from assets folder
 import ankurImg from "../assets/ankur2.jpg";
 import mayankimg from "../assets/mayank.jpg";
 import vikkiImg from "../assets/vishvendra.jpg";
