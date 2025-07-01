@@ -1,19 +1,33 @@
 const jwt = require("jsonwebtoken");
+const User = require("./User");
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.header("Authorization");
+const authenticateToken = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; 
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!token) {
     return res.status(403).json({ message: "Access Denied! No token provided." });
   }
 
-  const token = authHeader.split(" ")[1]; // Extract token part
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecretkey");
 
-  jwt.verify(token, process.env.JWT_SECRET || "supersecretkey", (err, user) => {
-    if (err) return res.status(403).json({ message: "Invalid Token!" });
-    req.user = user; // decoded payload
+    const user = await User.findById(decoded.id).select("id name email contact");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    req.user = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      contact: user.contact,
+    };
+
     next();
-  });
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid or expired token!" });
+  }
 };
 
 module.exports = authenticateToken;

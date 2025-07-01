@@ -17,12 +17,10 @@ const transporter = nodemailer.createTransport({
 router.post("/send-email", async (req, res) => {
   let { name, email, message } = req.body;
 
-  // ✅ Sanitize inputs
   const cleanName = validator.escape(name);
   const cleanEmail = validator.normalizeEmail(email);
   const cleanMessage = validator.escape(message);
 
-  // ✅ Validate email format (after normalization)
   if (!cleanName || !cleanEmail || !cleanMessage) {
     return res.status(400).json({ error: "All fields are required!" });
   }
@@ -32,7 +30,6 @@ router.post("/send-email", async (req, res) => {
   }
 
   try {
-    // ✅ Save sanitized message to DB
     const newMessage = new ContactMessage({
       name: cleanName,
       email: cleanEmail,
@@ -40,7 +37,6 @@ router.post("/send-email", async (req, res) => {
     });
     await newMessage.save();
 
-    // ✅ Email to site owner (you)
     await transporter.sendMail({
       from: cleanEmail,
       to: process.env.EMAIL,
@@ -48,7 +44,6 @@ router.post("/send-email", async (req, res) => {
       text: `Name: ${cleanName}\nEmail: ${cleanEmail}\nMessage: ${cleanMessage}`,
     });
 
-    // ✅ Confirmation email to user
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: cleanEmail,

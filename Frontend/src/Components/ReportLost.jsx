@@ -8,11 +8,12 @@ const ReportLost = () => {
     description: '',
     location: '',
     date: '',
-    image: '',
+    image: null, 
   });
 
   useEffect(() => {
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
+    const token = localStorage.getItem('token');
+    if (!token) {
       alert('Please login to report an item.');
       navigate('/login');
     }
@@ -25,18 +26,55 @@ const ReportLost = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => setFormData(prev => ({ ...prev, image: reader.result }));
-    if (file) reader.readAsDataURL(file);
+    if (file) {
+      setFormData((prev) => ({ ...prev, image: file }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const savedItems = JSON.parse(localStorage.getItem('foundItems')) || [];
-    savedItems.push(formData);
-    localStorage.setItem('foundItems', JSON.stringify(savedItems));
-    alert('Lost item reported successfully!');
-    setFormData({ itemName: '', description: '', location: '', date: '', image: '' });
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Session expired. Please log in again.");
+      navigate("/login");
+      return;
+    }
+
+    const data = new FormData();
+    data.append('itemName', formData.itemName);
+    data.append('description', formData.description);
+    data.append('location', formData.location);
+    data.append('date', formData.date);
+    data.append('image', formData.image); 
+
+    try {
+      const response = await fetch('https://tracepoint-usj3.onrender.com/report-lost', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('Lost item reported successfully!');
+        setFormData({
+          itemName: '',
+          description: '',
+          location: '',
+          date: '',
+          image: null,
+        });
+      } else {
+        alert(result.message || 'Failed to report lost item.');
+      }
+    } catch (error) {
+      console.error('Error reporting item:', error);
+      alert('Something went wrong. Please try again later.');
+    }
   };
 
   return (
@@ -91,7 +129,7 @@ const ReportLost = () => {
           </label>
           {formData.image && (
             <img
-              src={formData.image}
+              src={URL.createObjectURL(formData.image)}
               alt="Preview"
               className="w-full h-40 object-cover rounded-lg border mt-2 shadow-md"
             />

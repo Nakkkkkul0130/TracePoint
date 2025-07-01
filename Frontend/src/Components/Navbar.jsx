@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { name: "Home", id: "home", type: "scroll" },
@@ -27,11 +29,21 @@ export default function Navbar() {
   ];
 
   const handleScroll = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
     setMenuOpen(false);
+
+    const scrollToSection = () => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(scrollToSection, 100);
+    } else {
+      scrollToSection();
+    }
   };
 
   return (
@@ -44,7 +56,6 @@ export default function Navbar() {
           Trace Point
         </h1>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex space-x-5">
           {navItems.map(({ name, id, path, type }) =>
             type === "scroll" ? (
@@ -67,7 +78,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Desktop Buttons */}
         <div className="hidden md:flex space-x-4">
           {authLinks.map(({ path, label, styles }) => (
             <Link
@@ -80,12 +90,10 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
         <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
 
-        {/* Mobile Menu */}
         {menuOpen && (
           <div className="absolute top-16 left-0 w-full bg-white text-gray-800 shadow-lg p-4 flex flex-col items-center space-y-4 md:hidden">
             {navItems.map(({ name, id, path, type }) =>
@@ -122,7 +130,6 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Advertisement Banner */}
       <div className="w-full bg-yellow-400 text-black py-1 mb-9 overflow-hidden">
         <div className="animate-marquee text-lg font-semibold">
           🚀 Special Offer: Report lost items for free this month! | 📢 New

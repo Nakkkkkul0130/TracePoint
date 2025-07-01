@@ -10,5 +10,4 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
-// ✅ Prevent OverwriteModelError
 module.exports = mongoose.models.contactMessage || mongoose.model("contactMessage", contactSchema);

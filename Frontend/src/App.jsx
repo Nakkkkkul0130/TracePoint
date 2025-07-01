@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom"; // ✅ Do NOT use BrowserRouter here!
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
 import Features from "./Components/Features";
@@ -12,6 +12,12 @@ import { Statistics } from "./Components/Statistics";
 import ReportLost from "./Components/ReportLost";
 import ViewFound from "./Components/ViewFound";
 import About from "./Components/About";
+import ChatRoom from "./Components/ChatRoom";
+
+// ✅ New Admin Components
+import AdminLogin from "./Components/AdminLogin";
+import AdminDashboard from "./Components/AdminDashboard";
+import Inbox from "./Components/Inbox";
 
 function HomePage() {
   return (
@@ -43,6 +49,15 @@ export default function App() {
         <Route path="/report-lost" element={<ReportLost />} />
         <Route path="/view-found" element={<ViewFound />} />
         <Route path="/about" element={<About />} />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/chat/:itemId/:receiverId" element={<ChatRoom />} />
+        
+        {/* ✅ Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/inbox" element={<Inbox />} />
       </Routes>
     </>
   );
