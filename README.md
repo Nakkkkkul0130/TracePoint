@@ -63,7 +63,7 @@ cd TracePoint
 ```
 ### 2️⃣ Setup Backend
 ```
-cd server
+cd Backend
 npm install
 ```
 ### ➕ Create a .env file in /server with:
@@ -78,14 +78,14 @@ CLOUDINARY_API_SECRET=your_api_secret
 ```
 ### Start backend server:
 ```
-node index.js
+node server.js
 ```
 ### 3️⃣ Setup Frontend
-
+```
 cd Frontend
 npm install
 npm run dev
-
+```
 ### 🌍 Live Deployment
 Component	URL
 🌍 Frontend	https://tracepoint.vercel.app
