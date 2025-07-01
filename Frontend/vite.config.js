@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/auth': {
-        target: 'http://localhost:5000',
+        target: 'https://tracepoint-usj3.onrender.com',
         changeOrigin: true,
         secure: false,
       }
