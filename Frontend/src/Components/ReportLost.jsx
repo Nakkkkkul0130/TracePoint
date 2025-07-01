@@ -12,20 +12,12 @@ const ReportLost = () => {
   });
 
   useEffect(() => {
-  const checkAuth = async () => {
-    try {
-      const res = await fetch('https://tracepoint-usj3.onrender.com/auth/me', {
-        credentials: 'include'
-      });
-      if (!res.ok) throw new Error();
-    } catch (err) {
+    const token = localStorage.getItem('token');
+    if (!token) {
       alert('Please login to report an item.');
       navigate('/login');
     }
-  };
-  checkAuth();
-}, [navigate]);
-
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +51,9 @@ const ReportLost = () => {
     try {
       const response = await fetch('https://tracepoint-usj3.onrender.com/report-lost', {
         method: 'POST',
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: data,
       });
 
