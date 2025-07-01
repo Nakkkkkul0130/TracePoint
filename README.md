@@ -60,12 +60,12 @@ Built with a clean and responsive UI using **Tailwind CSS**, **Framer Motion**, 
 ```bash
 git clone https://github.com/Nakkkkkul0130/TracePoint
 cd TracePoint
-
-2️⃣ Setup Backend
+```
+### 2️⃣ Setup Backend
 ```
 cd server
 npm install
-
+```
 ### ➕ Create a .env file in /server with:
 ```
 PORT=5000
@@ -75,11 +75,11 @@ JWT_SECRET=your_jwt_secret_key
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
-
+```
 ### Start backend server:
 ```
 node index.js
-
+```
 ### 3️⃣ Setup Frontend
 
 cd Frontend
