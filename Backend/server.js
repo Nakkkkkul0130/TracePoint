@@ -8,7 +8,7 @@ require("dotenv").config();
 const { Server } = require("socket.io");
 const connectDB = require("./db");
 
-// const authRoutes = require("./LoginauthRoutes");
+const authRoutes = require("./LoginauthRoutes");
 const emailRoutes = require("./emailService");
 const reportLostRoutes = require("./reportLostRoutes");
 const foundItemRoutes = require("./foundItemRoutes");

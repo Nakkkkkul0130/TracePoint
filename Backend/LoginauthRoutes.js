@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/me", (req, res) => {
+router.get("/login", (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.status(401).json({ message: "Not authenticated" });
 
