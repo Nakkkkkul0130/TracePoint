@@ -1,134 +1,54 @@
 # 🌐 TracePoint
 
-**TracePoint** is a modern full-stack Lost & Found web application built with **React**, **Node.js**, **Express**, and **MongoDB**.  
-Users can report lost items, view found ones, and chat securely with item reporters.  
-Admins can monitor and manage submissions through a dedicated dashboard.
-
-Built with a clean and responsive UI using **Tailwind CSS**, **Framer Motion**, and **Cloudinary** for image uploads. ⚡️
+**TracePoint** is a modern and responsive Lost & Found web application built with **React**, **Vite**, **Tailwind CSS**, and **Framer Motion**. It helps users report lost items and view found ones with a clean and interactive UI. 🧳🔍
 
 ---
 
 ## ✨ Features
 
-### 👤 For Users
-- 📝 Report Lost Items (with image upload to Cloudinary)
-- 👁️ View Found Items
-- 💬 Real-time Chat (Socket.IO)
-- ✅ Claim Verification system
-- 🔐 JWT Authentication (Signup/Login)
-- 🌙 Light/Dark Theme Toggle
-- 📥 Message History per item/user
-- 📷 Image upload via Cloudinary
-
-### 🛠️ For Admin (You)
-- 🧑‍💼 Admin Dashboard  
-- 📋 View and Manage Lost Reports  
-- 👀 Monitor Found Items  
-- ❌ Delete or Moderate Items (optional)  
-- 🔍 See User & Contact Info on Reports  
+- 📝 Report Lost Items with image upload and form validation  
+- 👀 View Found Items with image preview  
+- ✅ Claim Verification system for found items  
+- 🔒 User Authentication with `localStorage`  
+- 🌗 Light/Dark Theme support using Tailwind  
+- 💫 Smooth animations using Framer Motion  
+- 📂 Persistent data storage (localStorage + MongoDB in backend version)  
+- 📧 Contact form with Nodemailer + MongoDB (in backend)  
 
 ---
 
-## 🧑‍💻 Tech Stack
+## 🚀 Tech Stack
 
-### 🖥 Frontend
-- ⚛️ React (Vite)
-- 🎨 Tailwind CSS
-- 💫 Framer Motion
-- 🔀 React Router
-- 🗂️ Axios for API Calls
-
-### 🗄 Backend
-- 🚀 Node.js + Express
-- 🧠 MongoDB + Mongoose
-- 🔐 JWT Auth Middleware
-- ☁️ Cloudinary (Image Storage)
-- 💬 Socket.IO for Chat
-- ✉️ Nodemailer (Contact Form)
+- ⚛️ React (Vite)  
+- 🎨 Tailwind CSS  
+- 🎥 Framer Motion  
+- 🌐 React Router  
+- 🧠 localStorage (for login/auth)  
+- 📦 MongoDB (backend support for login/signup if logged in then only report lost item and for email persistence)  
+- ✉️ Nodemailer (for contact form)  
 
 ---
 
 ## 🧑‍💻 Installation & Setup
 
-### 1️⃣ Clone the Repository
+1. **Clone the repo:**
 
 ```bash
 git clone https://github.com/Nakkkkkul0130/TracePoint
-cd TracePoint
+cd tracepoint
 
-### 2️⃣ Setup Backend
-```bash
 
-cd server
+2.Install all dependencies:
 npm install
 
-### ➕ Create a .env file in /server with:
-```bash
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-Start backend server:
-
-node index.js
-
-### 3️⃣ Setup Frontend
-```
-cd ../client
-npm install
+3.Start the development server:
 npm run dev
-Visit: http://localhost:5173
-
-### 🌍 Live Deployment
-Component	URL
-🌍 Frontend	https://tracepoint.vercel.app
-🚀 Backend	https://tracepoint-usj3.onrender.com
-
-### 📤 Cloudinary Image Upload
-Both Lost and Found item reports support secure image uploads using Multer + Cloudinary.
-Images are stored and served via secure public Cloudinary URLs.
-
-### 💬 Real-Time Chat
-Socket.IO is used for 1-to-1 messaging
-
-Room = itemId + sender/receiverId based
-
-Auto-scroll + chat persistence in MongoDB
-
-Chat preview shown in Inbox (latest message)
-
-### 📧 Contact Form
-Sends user message to admin email via Nodemailer
-
-Also stores contact message in MongoDB for reference
-
-### 🔐 Auth & Security
-JWT Authentication
-
-Tokens stored in HTTP-only Cookies
-
-All routes protected via middleware
-
-Admin dashboard access is reserved
-
-### 🧾 License
-This project is licensed under the MIT License.
-
-MIT License
-
-Copyright (c) 2025 Nakul
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
 
 
-### 👨‍💻 Author
-Developed with ❤️ by:
+Open your browser and go to: http://localhost:5173
 
-Nakul Bhar
-🔗 @Nakkkkkul0130
-📧 nakulbhar13@gmail.com
+## 🌍 Live Demo
+
+Check out the live deployed version here:  
+🔗 [https://tracepoint.vercel.app](https://tracepoint.vercel.app)
+
