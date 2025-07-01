@@ -87,18 +87,33 @@ npm install
 npm run dev
 ```
 ### 🌍 Live Deployment
-Component	URL
-🌍 Frontend	https://tracepoint.vercel.app
-🚀 Backend	https://tracepoint-usj3.onrender.com
 
+**Component** | **URL**
+--- | ---
+🌐 Frontend | [https://tracepoint.vercel.app](https://tracepoint.vercel.app)
+🚀 Backend | [https://tracepoint-usj3.onrender.com](https://tracepoint-usj3.onrender.com)
+
+---
 
 ### 🧾 License
-This project is licensed under the MIT License.
+
+This project is licensed under the **MIT License**.
+
 MIT License
+
 Copyright (c) 2025 Nakul
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
+
+
+---
 
 ### 👨‍💻 Author
-Developed with ❤️ by: Nakul Bhar
-🔗 @Nakkkkkul0130
-📧 nakulbhar13@gmail.com
+
+Developed with ❤️ by:
+
+**Nakul Bhar**  
+🔗 GitHub: [@Nakkkkkul0130](https://github.com/Nakkkkkul0130)  
+📧 Email: [nakulbhar13@gmail.com](mailto:nakulbhar13@gmail.com)
