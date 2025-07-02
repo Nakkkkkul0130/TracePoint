@@ -51,9 +51,15 @@ app.get("/", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(" Server Error:", err.stack);
-  res.status(500).json({ message: "Internal Server Error", error: err.message });
+  console.error("🔥 Error Middleware Triggered:");
+  console.error("Error Message:", err.message);
+  console.error("Error Stack:", err.stack);
+  res.status(500).json({
+    message: "Internal Server Error",
+    error: err.message,
+  });
 });
+
 
 io.on("connection", (socket) => {
   console.log("🔌 Socket connected:", socket.id);
