@@ -1,10 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function Hero() {
-  const token = localStorage.getItem("token");
-  const navigate = useNavigate();
-
   return (
     <section className="text-center py-28 bg-gradient-to-r from-blue-100 to-blue-300 dark:from-gray-900 dark:to-gray-800 transition-colors duration-500">
       <motion.h1 
@@ -31,21 +28,12 @@ export default function Hero() {
         transition={{ delay: 0.6, duration: 0.8 }}
         className="mt-8 flex justify-center gap-6"
       >
-        {token ? (
-          <Link 
-            to="/report-lost" 
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 hover:scale-105 transition-all duration-300"
-          >
-            Report Lost Item
-          </Link>
-        ) : (
-          <button
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 hover:scale-105 transition-all duration-300"
-            onClick={() => navigate("/login")}
-          >
-            Login to Report Lost Item
-          </button>
-        )}
+        <Link 
+          to="/report-lost" 
+          className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 hover:scale-105 transition-all duration-300"
+        >
+          Report Lost Item
+        </Link>
 
         <Link 
           to="/view-found" 
