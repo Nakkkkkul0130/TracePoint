@@ -7,9 +7,9 @@ const reportLostSchema = new mongoose.Schema(
     location: { type: String, required: true, trim: true },
     date: { type: Date, required: true },
     image: { type: String, required: true }, 
-    // userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    // founderName: { type: String },
-    // founderContact: { type: String },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    founderName: { type: String },
+    founderContact: { type: String },
   },
   { timestamps: true } 
 );
