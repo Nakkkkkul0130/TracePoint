@@ -52,13 +52,19 @@ app.get("/", (req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("🔥 Error Middleware Triggered:");
-  console.error("Error Message:", err.message);
-  console.error("Error Stack:", err.stack);
+  if (err instanceof Error) {
+    console.error("Error Message:", err.message);
+    console.error("Error Stack:", err.stack);
+  } else {
+    console.error("Unknown error:", err);
+  }
+
   res.status(500).json({
     message: "Internal Server Error",
-    error: err.message,
+    error: err?.message || "Unknown server error",
   });
 });
+
 
 
 io.on("connection", (socket) => {
