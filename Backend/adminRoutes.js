@@ -5,8 +5,8 @@ const FoundItem = require("./FoundItem");
 
 const router = express.Router();
 const SECRET_KEY = process.env.ADMIN_SECRET || "adminsecret";
-const ADMIN_USER = process.env.ADMIN_USER || "admin";
-const ADMIN_PASS = process.env.ADMIN_PASS || "admin123";
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASS;
 
 function authenticateToken(req, res, next) {
   const token = req.cookies?.adminToken;
