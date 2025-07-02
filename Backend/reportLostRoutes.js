@@ -1,13 +1,15 @@
+// reportLostRoutes.js
 const express = require("express");
 const multer = require("multer");
-const { lostItemStorage } = require("./config/cloudinary");
+const { lostItemStorage } = require("./config/cloudinary"); // ⬅️ make sure this is correct
 const authenticateToken = require("./authMiddleware");
 const ReportLost = require("./ReportLostItem");
 const User = require("./User");
 
 const router = express.Router();
-const upload = multer({ storage: lostItemStorage });
+const upload = multer({ storage: lostItemStorage }); // ⬅️ Using Cloudinary
 
+// POST /report-lost
 router.post(
   "/report-lost",
   authenticateToken,
@@ -29,8 +31,8 @@ router.post(
         itemName,
         description,
         location,
-        date,
-        image: req.file.path,
+        date: new Date(date),
+        image: req.file.path, // ⬅️ Cloudinary URL
         userId: req.user.id,
         founderName: user.name,
         founderContact: user.contact,
@@ -39,19 +41,19 @@ router.post(
       await newReport.save();
       res.status(201).json({ message: "Lost item reported", item: newReport });
     } catch (error) {
-      console.error("Error in POST /report-lost:", {
+      console.error("❌ Error in POST /report-lost:", {
         message: error.message,
         stack: error.stack,
         body: req.body,
         file: req.file,
         user: req.user,
       });
-      res.status(500).json({ message: "Failed to save report", error: error.message });
+      res.status(500).json({ message: "Failed to report lost item", error: error.message });
     }
   }
 );
 
-
+// GET /report-lost
 router.get("/report-lost", authenticateToken, async (req, res) => {
   try {
     const items = await ReportLost.find().sort({ createdAt: -1 });
@@ -62,6 +64,7 @@ router.get("/report-lost", authenticateToken, async (req, res) => {
   }
 });
 
+// GET /found-items
 router.get("/found-items", authenticateToken, async (req, res) => {
   try {
     const items = await ReportLost.find().sort({ createdAt: -1 });
