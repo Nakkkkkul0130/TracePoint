@@ -80,7 +80,7 @@ const ReportLost = () => {
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/report-lost`, {
+      const response = await fetch(`${BASE_URL}/lost/report-lost`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
