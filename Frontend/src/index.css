@@ -16,4 +16,7 @@
     src: url('/fonts/Inter.ttf') format('truetype');
     font-weight: 400;
   }
+  .input-style {
+  @apply w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-indigo-400;
+}
   

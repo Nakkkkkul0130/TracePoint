@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 const ReportLost = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -13,11 +15,29 @@ const ReportLost = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      alert('Please login to report an item.');
-      navigate('/login');
+      alert("Please login to report an item.");
+      return navigate("/login");
     }
+
+    // Optional: verify token via backend
+    fetch(`${BASE_URL}/auth/verify-token`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          localStorage.clear();
+          alert("Session expired. Please login again.");
+          navigate("/login");
+        }
+      })
+      .catch(() => {
+        alert("Token verification failed. Please login again.");
+        localStorage.clear();
+        navigate("/login");
+      });
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -50,18 +70,15 @@ const ReportLost = () => {
     setLoading(true);
 
     const data = new FormData();
-    data.append('itemName', formData.itemName);
-    data.append('description', formData.description);
-    data.append('location', formData.location);
-    data.append('date', formData.date);
-    data.append('image', formData.image);
+    Object.entries(formData).forEach(([key, value]) => {
+      data.append(key, value);
+    });
 
     try {
-      const response = await fetch('https://tracepoint-usj3.onrender.com/report-lost', {
+      const response = await fetch(`${BASE_URL}/report-lost`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          // Don't set Content-Type for FormData
         },
         body: data,
       });
@@ -102,7 +119,7 @@ const ReportLost = () => {
             value={formData.itemName}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="input-style"
           />
           <textarea
             name="description"
@@ -110,7 +127,7 @@ const ReportLost = () => {
             value={formData.description}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="input-style"
           />
           <input
             type="text"
@@ -119,7 +136,7 @@ const ReportLost = () => {
             value={formData.location}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="input-style"
           />
           <input
             type="date"
@@ -127,7 +144,7 @@ const ReportLost = () => {
             value={formData.date}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="input-style"
           />
           <label className="block w-full px-4 py-2 text-center bg-gradient-to-r from-purple-300 to-pink-300 dark:from-purple-700 dark:to-pink-700 text-black dark:text-white rounded-lg cursor-pointer hover:from-purple-400 hover:to-pink-400 transition-all">
             Upload Image
