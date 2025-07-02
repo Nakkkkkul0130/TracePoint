@@ -6,33 +6,33 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 export function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
   const [loginMode, setLoginMode] = useState(""); // "", "user", or "admin"
   const navigate = useNavigate();
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    fetch(`${BASE_URL}/auth/verify-token`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.user) {
-          setIsLoggedIn(true);
-          navigate("/"); // ✅ redirect to home/dashboard if already logged in
-        } else {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      fetch(`${BASE_URL}/auth/verify-token`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.user) {
+            setIsLoggedIn(true);
+            setUserName(data.user.name);
+          } else {
+            setIsLoggedIn(false);
+            localStorage.clear();
+          }
+        })
+        .catch(() => {
           setIsLoggedIn(false);
           localStorage.clear();
-        }
-      })
-      .catch(() => {
-        localStorage.clear();
-        setIsLoggedIn(false);
-      });
-  }
-}, [navigate]);
-
-
+        });
+    }
+  }, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,11 +50,13 @@ export function Login() {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-      localStorage.setItem("userId", data.user.id); // ⬅️ ADD this
+      localStorage.setItem("userId", data.user.id);
       localStorage.setItem("userName", data.user.name);
+
       alert("Login Successful!");
       setIsLoggedIn(true);
-      navigate("/"); 
+      setUserName(data.user.name);
+      navigate("/"); // Redirect to home/dashboard
     } else {
       alert(data.message);
     }
@@ -62,9 +64,10 @@ export function Login() {
 
   const handleLogout = () => {
     localStorage.clear();
-    alert("Logged out successfully!");
     setIsLoggedIn(false);
+    setUserName("");
     setLoginMode("");
+    alert("Logged out successfully!");
     navigate("/login");
   };
 
@@ -76,16 +79,21 @@ export function Login() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-200 via-indigo-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 animate-fade-in">
       <div className="w-full max-w-md p-8 bg-white/40 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-2xl transition-all duration-300">
         <h2 className="text-3xl font-extrabold text-center text-black dark:text-white mb-6 animate-bounce">
-          {isLoggedIn ? "You're Already Logged In" : "Login"}
+          {isLoggedIn ? `Welcome, ${userName}` : "Login"}
         </h2>
 
         {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
-          >
-            Logout
-          </button>
+          <>
+            <p className="text-center text-green-700 dark:text-green-300 mb-4">
+              You are already logged in.
+            </p>
+            <button
+              onClick={handleLogout}
+              className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <>
             {!loginMode && (
