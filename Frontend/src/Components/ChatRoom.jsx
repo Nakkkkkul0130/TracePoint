@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 const CHAT_URL = import.meta.env.VITE_SOCKET_URL;
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-const socket = io('import.meta.env.VITE_SOCKET_URL', {
+const socket = io(CHAT_URL, {
   transports: ['websocket'],
   withCredentials: true,
 });
