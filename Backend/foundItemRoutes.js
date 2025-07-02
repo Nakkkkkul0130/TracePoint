@@ -9,7 +9,7 @@ const { foundItemStorage } = require("./config/cloudinary");
 const upload = multer({ storage: foundItemStorage });
 
 router.post(
-  "/found-item",
+  "/view-found",
   authenticateToken,
   upload.single("image"),
   async (req, res) => {

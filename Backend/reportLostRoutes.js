@@ -64,15 +64,5 @@ router.get("/report-lost", authenticateToken, async (req, res) => {
   }
 });
 
-// GET /found-items
-router.get("/found-items", authenticateToken, async (req, res) => {
-  try {
-    const items = await ReportLost.find().sort({ createdAt: -1 });
-    res.status(200).json({ items });
-  } catch (error) {
-    console.error("Error in GET /found-items:", error);
-    res.status(500).json({ message: "Failed to fetch found items", error: error.message });
-  }
-});
 
 module.exports = router;
