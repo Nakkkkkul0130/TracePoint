@@ -13,6 +13,8 @@ const ReportLost = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log("🟢 Sending token:", token);
+
     if (!token) {
       alert('Please login to report an item.');
       navigate('/login');
