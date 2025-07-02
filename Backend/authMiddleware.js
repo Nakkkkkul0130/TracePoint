@@ -10,7 +10,6 @@ if (!token) return res.status(403).json({ message: "Access Denied! No token prov
 try {
   const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecretkey");
   console.log("Decoded:", decoded);
-  ...
 } catch (err) {
   console.error("JWT error:", err);
   return res.status(403).json({ message: "Invalid or expired token!" });
