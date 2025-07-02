@@ -21,8 +21,8 @@ export function Login() {
           setIsLoggedIn(true);
           navigate("/"); // ✅ redirect to home/dashboard if already logged in
         } else {
-          localStorage.clear();
           setIsLoggedIn(false);
+          localStorage.clear();
         }
       })
       .catch(() => {
