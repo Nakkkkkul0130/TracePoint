@@ -39,11 +39,18 @@ router.post(
       await newReport.save();
       res.status(201).json({ message: "Lost item reported", item: newReport });
     } catch (error) {
-      console.error("Error in POST /report-lost:", error);
+      console.error("Error in POST /report-lost:", {
+        message: error.message,
+        stack: error.stack,
+        body: req.body,
+        file: req.file,
+        user: req.user,
+      });
       res.status(500).json({ message: "Failed to save report", error: error.message });
     }
   }
 );
+
 
 router.get("/report-lost", authenticateToken, async (req, res) => {
   try {

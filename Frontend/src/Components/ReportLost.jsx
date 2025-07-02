@@ -8,13 +8,12 @@ const ReportLost = () => {
     description: '',
     location: '',
     date: '',
-    image: null, 
+    image: null,
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log("🟢 Sending token:", token);
-
     if (!token) {
       alert('Please login to report an item.');
       navigate('/login');
@@ -36,6 +35,11 @@ const ReportLost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.image) {
+      alert("Please upload an image.");
+      return;
+    }
+
     const token = localStorage.getItem('token');
     if (!token) {
       alert("Session expired. Please log in again.");
@@ -43,18 +47,21 @@ const ReportLost = () => {
       return;
     }
 
+    setLoading(true);
+
     const data = new FormData();
     data.append('itemName', formData.itemName);
     data.append('description', formData.description);
     data.append('location', formData.location);
     data.append('date', formData.date);
-    data.append('image', formData.image); 
+    data.append('image', formData.image);
 
     try {
       const response = await fetch('https://tracepoint-usj3.onrender.com/report-lost', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          // Don't set Content-Type for FormData
         },
         body: data,
       });
@@ -74,8 +81,10 @@ const ReportLost = () => {
         alert(result.message || 'Failed to report lost item.');
       }
     } catch (error) {
-      console.error('Error reporting item:', error);
       alert('Something went wrong. Please try again later.');
+      console.error('Error reporting item:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -127,6 +136,7 @@ const ReportLost = () => {
               accept="image/*"
               onChange={handleImageChange}
               className="hidden"
+              required
             />
           </label>
           {formData.image && (
@@ -139,8 +149,9 @@ const ReportLost = () => {
           <button
             type="submit"
             className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
+            disabled={loading}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
       </div>
