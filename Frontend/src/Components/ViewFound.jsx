@@ -18,7 +18,7 @@ const ViewFound = () => {
       fetch("https://tracepoint-usj3.onrender.com/view-found", {
         headers: { Authorization: `Bearer ${token}` },
       }),
-      fetch("https://tracepoint-usj3.onrender.com/report-lost", {
+      fetch("https://tracepoint-usj3.onrender.com/lost/report-lost", {
         headers: { Authorization: `Bearer ${token}` },
       }),
     ])
