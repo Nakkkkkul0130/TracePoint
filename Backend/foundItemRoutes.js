@@ -42,7 +42,7 @@ router.post(
   }
 );
 
-router.get("/view-found", authenticateToken, async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
   try {
     const items = await FoundItem.find().sort({ date: -1 });
     res.status(200).json({ items });
