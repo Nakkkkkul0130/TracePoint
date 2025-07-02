@@ -15,16 +15,23 @@ export function Login() {
     fetch(`${BASE_URL}/auth/verify-token`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => {
-        if (res.ok) {
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
           setIsLoggedIn(true);
+          navigate("/"); // ✅ redirect to home/dashboard if already logged in
         } else {
           localStorage.clear();
           setIsLoggedIn(false);
         }
       })
+      .catch(() => {
+        localStorage.clear();
+        setIsLoggedIn(false);
+      });
   }
-}, []);
+}, [navigate]);
+
 
 
   const handleChange = (e) =>
