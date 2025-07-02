@@ -14,5 +14,6 @@ try {
   console.error("JWT error:", err);
   return res.status(403).json({ message: "Invalid or expired token!" });
 }
+}
 
 module.exports = authenticateToken;
