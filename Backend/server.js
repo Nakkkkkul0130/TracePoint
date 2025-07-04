@@ -43,7 +43,7 @@ app.use("/auth", authRoutes);             // Login, signup, verify-token
 app.use("/email", emailRoutes);           // Email service
 app.use("/lost", reportLostRoutes);           
 app.use("/view-found", foundItemRoutes);  
-app.use("/admin", adminRoutes);                
+app.use("/", adminRoutes);                
 app.use(messageRoutes);                   
 
 app.get("/", (req, res) => {
