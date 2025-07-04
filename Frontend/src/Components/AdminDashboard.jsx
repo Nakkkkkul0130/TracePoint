@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaEye, FaChartLine, FaTrash, FaSignOutAlt } from "react-icons/fa";
-import { Line } from 'react-chartjs-2';
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   LineElement,
@@ -10,7 +10,7 @@ import {
   PointElement,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -20,55 +20,83 @@ export default function AdminDashboard() {
   const [foundItems, setFoundItems] = useState([]);
 
   const fetchLost = async () => {
-    const token = localStorage.getItem("adminToken");
-    const res = await fetch("https://tracepoint-usj3.onrender.com/admin/lost-items", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    if (res.ok) setLostItems(data);
+    try {
+      const res = await fetch("https://tracepoint-usj3.onrender.com/admin/lost-items", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Failed to fetch lost items:", error.message);
+        return;
+      }
+      const data = await res.json();
+      setLostItems(data);
+    } catch (err) {
+      console.error("Error fetching lost items:", err);
+    }
   };
 
   const fetchFound = async () => {
-    const token = localStorage.getItem("adminToken");
-    const res = await fetch("https://tracepoint-usj3.onrender.com/admin/found-items", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    if (res.ok) setFoundItems(data);
+    try {
+      const res = await fetch("https://tracepoint-usj3.onrender.com/admin/found-items", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Failed to fetch found items:", error.message);
+        return;
+      }
+      const data = await res.json();
+      setFoundItems(data);
+    } catch (err) {
+      console.error("Error fetching found items:", err);
+    }
   };
 
   const deleteItem = async (type, id) => {
-    const token = localStorage.getItem("adminToken");
-    await fetch(`https://tracepoint-usj3.onrender.com/admin/${type}-items/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    type === "lost" ? fetchLost() : fetchFound();
+    try {
+      await fetch(`https://tracepoint-usj3.onrender.com/admin/${type}-items/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      type === "lost" ? fetchLost() : fetchFound();
+    } catch (err) {
+      console.error("Error deleting item:", err);
+    }
   };
 
   useEffect(() => {
-  fetch("https://tracepoint-usj3.onrender.com/admin/lost-items", {
-    method: "GET",
-    credentials: "include",
-  }).then((res) => {
-    if (res.status === 401 || res.status === 403) {
-      window.location.href = "/admin/login";
-    } else {
-      fetchLost();
-      fetchFound();
-    }
-  });
-}, []);
+    const checkAuth = async () => {
+      const res = await fetch("https://tracepoint-usj3.onrender.com/admin/lost-items", {
+        method: "GET",
+        credentials: "include",
+      });
 
+      if (res.status === 401 || res.status === 403) {
+        window.location.href = "/admin/login";
+      } else {
+        fetchLost();
+        fetchFound();
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleLogout = async () => {
-  await fetch("https://tracepoint-usj3.onrender.com/admin/logout", {
-    method: "POST",
-    credentials: "include", //  sends cookie
-  });
-  window.location.href = "/admin/login";
-};
-
+    try {
+      await fetch("https://tracepoint-usj3.onrender.com/admin/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      window.location.href = "/admin/login";
+    }
+  };
 
   const navItems = [
     { key: "dashboard", label: "Dashboard", icon: <FaChartLine /> },
