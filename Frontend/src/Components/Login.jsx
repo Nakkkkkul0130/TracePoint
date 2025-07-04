@@ -7,7 +7,8 @@ export function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
-  const [loginMode, setLoginMode] = useState(""); // "", "user", or "admin"
+  const [loginMode, setLoginMode] = useState(""); 
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,26 +40,34 @@ export function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); 
 
-    const response = await fetch(`${BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-      localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("userName", data.user.name);
+      const data = await response.json();
 
-      alert("Login Successful!");
-      setIsLoggedIn(true);
-      setUserName(data.user.name);
-      navigate("/"); // Redirect to home/dashboard
-    } else {
-      alert(data.message);
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("userName", data.user.name);
+
+        alert("Login Successful!");
+        setIsLoggedIn(true);
+        setUserName(data.user.name);
+        navigate("/"); 
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      alert("Login failed. Please try again.");
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -134,9 +143,14 @@ export function Login() {
                 <div className="flex gap-4">
                   <button
                     type="submit"
-                    className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
+                    disabled={isLoading}
+                    className={`w-full py-2 px-4 rounded-lg ${
+                      isLoading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600"
+                    } text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300`}
                   >
-                    Login
+                    {isLoading ? "Logging..." : "Login"}
                   </button>
                   <button
                     type="button"
