@@ -14,7 +14,6 @@ import ViewFound from "./Components/ViewFound";
 import About from "./Components/About";
 import ChatRoom from "./Components/ChatRoom";
 
-// ✅ New Admin Components
 import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import Inbox from "./Components/Inbox";
@@ -54,7 +53,6 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/chat/:itemId/:receiverId" element={<ChatRoom />} />
         
-        {/* ✅ Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/inbox" element={<Inbox />} />
