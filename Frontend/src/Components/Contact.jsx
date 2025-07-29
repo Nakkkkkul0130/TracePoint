@@ -31,7 +31,7 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${BASE_URL}/send-email`, {
+      const response = await fetch(`${BASE_URL}/email/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
