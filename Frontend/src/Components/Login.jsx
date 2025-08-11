@@ -18,7 +18,7 @@ export function Login() {
       fetch(`${BASE_URL}/auth/verify-token`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-        .then((res) => res.json());
+        .then((res) => res.json())
         .then((data) => {
           if (data.user) {
             setIsLoggedIn(true);
