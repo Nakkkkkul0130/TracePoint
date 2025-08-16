@@ -29,8 +29,9 @@ export default function Footer() {
       </div>
 
       <div className="mt-6 text-sm text-gray-100 font-semibold italic">
-  Made with <span className="animate-pulse text-lg">🔮</span> & <span className="text-pink-300 font-bold">unicorn dust 🦄</span> by <span className="text-lime-300 font-extrabold">Nakul</span> ✨
+  Made with <span className="text-red-500">❤️</span> by <span className="text-lime-300 font-extrabold">Nakul</span>
 </div>
+
 
     </footer>
   );
