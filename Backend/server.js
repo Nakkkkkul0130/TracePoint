@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error("🔥 Error Middleware Triggered:");
+  console.error(" Error Middleware Triggered:");
   if (err instanceof Error) {
     console.error("Error Message:", err.message);
     console.error("Error Stack:", err.stack);
@@ -68,11 +68,11 @@ app.use((err, req, res, next) => {
 
 
 io.on("connection", (socket) => {
-  console.log("🔌 Socket connected:", socket.id);
+  console.log(" Socket connected:", socket.id);
 
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
-    console.log(`🏠 User joined room: ${roomId}`);
+    console.log(` User joined room: ${roomId}`);
   });
 
   socket.on("sendMessage", (message) => {
@@ -81,11 +81,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("🚪 Socket disconnected:", socket.id);
+    console.log("Socket disconnected:", socket.id);
   });
 });
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

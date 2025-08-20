@@ -14,7 +14,7 @@ const ReportLost = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false); // ✅ track if auth check is done
+  const [authChecked, setAuthChecked] = useState(false); // track if auth check is done
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,7 +25,7 @@ const ReportLost = () => {
       return;
     }
 
-    // 🔒 Optional: Verify token validity
+    // Verify token validity
     fetch(`${BASE_URL}/auth/verify-token`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -35,7 +35,7 @@ const ReportLost = () => {
           alert("Session expired. Please login again.");
           navigate("/login");
         } else {
-          setAuthChecked(true); // ✅ Only show form after token is verified
+          setAuthChecked(true); // Only show form after token is verified
         }
       })
       .catch(() => {

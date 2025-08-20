@@ -15,7 +15,7 @@ router.get("/messages/:itemId", authenticateToken, async (req, res) => {
       .lean();
     res.json(messages);
   } catch (error) {
-    console.error("❌ Failed to fetch messages:", error);
+    console.error("Failed to fetch messages:", error);
     res.status(500).json({ message: "Failed to fetch messages" });
   }
 });

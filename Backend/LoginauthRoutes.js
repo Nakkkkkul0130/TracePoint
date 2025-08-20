@@ -6,9 +6,7 @@ const User = require("./User");
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
 
-// ───────────────────────────────────────────
-// ✅ Signup Route
-// ───────────────────────────────────────────
+
 router.post("/signup", async (req, res) => {
   try {
     const { name, contact, email, password } = req.body;
@@ -28,9 +26,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// ───────────────────────────────────────────
-// ✅ Login Route
-// ───────────────────────────────────────────
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,9 +54,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ───────────────────────────────────────────
-// ✅ Verify Token (for frontend to check session validity)
-// ───────────────────────────────────────────
+
 router.get("/verify-token", async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
@@ -78,9 +72,7 @@ router.get("/verify-token", async (req, res) => {
   }
 });
 
-// ───────────────────────────────────────────
-// ✅ Logout (Optional — only useful for cookie-based auth)
-// ───────────────────────────────────────────
+
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,

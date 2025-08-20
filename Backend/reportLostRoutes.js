@@ -1,13 +1,13 @@
 // reportLostRoutes.js
 const express = require("express");
 const multer = require("multer");
-const { lostItemStorage } = require("./config/cloudinary"); // ⬅️ make sure this is correct
+const { lostItemStorage } = require("./config/cloudinary"); //make sure this is correct
 const authenticateToken = require("./authMiddleware");
 const ReportLost = require("./ReportLostItem");
 const User = require("./User");
 
 const router = express.Router();
-const upload = multer({ storage: lostItemStorage }); // ⬅️ Using Cloudinary
+const upload = multer({ storage: lostItemStorage }); // Using Cloudinary
 
 // POST /report-lost
 // POST /report-lost
@@ -47,7 +47,7 @@ router.post(
         .status(201)
         .json({ message: "Lost item reported", item: newReport });
     } catch (error) {
-      console.error("❌ Caught Error in POST /report-lost");
+      console.error(" Caught Error in POST /report-lost");
       console.error("Type:", typeof error);
       console.error("Error object:", error);
       console.error("Error message:", error?.message);
@@ -55,7 +55,7 @@ router.post(
       console.error("Request body:", req.body);
       console.error("Request file:", req.file);
 
-      return next(error); // ✅ Pass error to middleware
+      return next(error); //  Pass error to middleware
     }
   }
 );

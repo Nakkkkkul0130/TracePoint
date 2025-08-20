@@ -6,7 +6,7 @@ const User = require("./User");
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-// ⬅️ POST /signup
+//POST /signup
 router.post("/signup", async (req, res) => {
   try {
     const { name, contact, email, password } = req.body;
@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// ⬅️ POST /login
+//POST /login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ⬅️ GET /verify-token
+//GET /verify-token
 router.get("/verify-token", async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
 
