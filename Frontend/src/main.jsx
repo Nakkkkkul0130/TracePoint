@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <App />
       <Analytics />
-      <SpeedInsights />
+      <SpeedInsights url="https://trace-point.vercel.app/" framework="react" />
     </BrowserRouter>
   </React.StrictMode>
 );
