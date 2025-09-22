@@ -4,14 +4,12 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
       <Analytics />
-      <SpeedInsights url="https://trace-point.vercel.app/" framework="react" />
     </BrowserRouter>
   </React.StrictMode>
 );
