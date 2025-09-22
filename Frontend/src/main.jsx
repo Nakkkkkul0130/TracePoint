@@ -11,6 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <App />
       <Analytics />
+      <SpeedInsights />
     </BrowserRouter>
   </React.StrictMode>
 );
