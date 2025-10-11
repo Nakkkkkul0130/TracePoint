@@ -13,20 +13,17 @@ import ReportLost from "./Components/ReportLost";
 import ViewFound from "./Components/ViewFound";
 import About from "./Components/About";
 import ChatRoom from "./Components/ChatRoom";
+import Dashboard from "./Components/Dashboard";
+import ReportFound from "./Components/ReportFound";
 
 import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
 import Inbox from "./Components/Inbox";
+import sessionManager from "./utils/sessionManager";
 
 function HomePage() {
   return (
     <>
-      <div className="w-full bg-yellow-400 text-black py-2 overflow-hidden flex justify-center items-center">
-        <p className="text-lg font-semibold animate-marquee">
-          📢 New feature Coming soon: QR Code Tagging for lost & found items! | 🔥 Join our community today!
-        </p>
-      </div>
-
       <div id="home"><Hero /></div>
       <div id="features"><Features /></div>
       <div id="statistics"><Statistics /></div>
@@ -46,7 +43,9 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/report-lost" element={<ReportLost />} />
+        <Route path="/report-found" element={<ReportFound />} />
         <Route path="/view-found" element={<ViewFound />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/testimonials" element={<Testimonials />} />

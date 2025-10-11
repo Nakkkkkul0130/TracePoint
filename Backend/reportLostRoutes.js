@@ -2,9 +2,9 @@
 const express = require("express");
 const multer = require("multer");
 const { lostItemStorage } = require("./config/cloudinary"); //make sure this is correct
-const authenticateToken = require("./authMiddleware");
-const ReportLost = require("./ReportLostItem");
-const User = require("./User");
+const authenticateToken = require("./middleware/authMiddleware");
+const ReportLost = require("./models/ReportLostItem");
+const User = require("./models/User");
 
 const router = express.Router();
 const upload = multer({ storage: lostItemStorage }); // Using Cloudinary
@@ -60,14 +60,25 @@ router.post(
   }
 );
 
-// GET /report-lost
+// GET /report-lost - Get all items except user's own
 router.get("/report-lost", authenticateToken, async (req, res) => {
   try {
-    const items = await ReportLost.find().sort({ createdAt: -1 });
+    const items = await ReportLost.find({ userId: { $ne: req.user.id } }).sort({ createdAt: -1 });
     res.status(200).json({ items });
   } catch (error) {
     console.error("Error in GET /report-lost:", error);
     res.status(500).json({ message: "Failed to fetch lost items", error: error.message });
+  }
+});
+
+// GET /my-reports - Get user's own reports
+router.get("/my-reports", authenticateToken, async (req, res) => {
+  try {
+    const items = await ReportLost.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    res.status(200).json({ items });
+  } catch (error) {
+    console.error("Error in GET /my-reports:", error);
+    res.status(500).json({ message: "Failed to fetch my reports", error: error.message });
   }
 });
 

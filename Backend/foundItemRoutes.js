@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 
 const FoundItem = require("./FoundItem");
-const authenticateToken = require("./authMiddleware");
+const authenticateToken = require("./middleware/authMiddleware");
 const { foundItemStorage } = require("./config/cloudinary");
 
 const upload = multer({ storage: foundItemStorage });

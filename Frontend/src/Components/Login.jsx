@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+// Try local first, fallback to production
+const getBaseURL = () => {
+  const localURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const prodURL = import.meta.env.VITE_BACKEND_URL_PROD || "https://tracepoint-usj3.onrender.com";
+  
+  return window.location.hostname === 'localhost' ? localURL : prodURL;
+};
+
+const BASE_URL = getBaseURL();
 
 export function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -60,7 +68,7 @@ export function Login() {
         alert("Login Successful!");
         setIsLoggedIn(true);
         setUserName(data.user.name);
-        navigate("/"); 
+        navigate("/dashboard"); 
       } else {
         alert(data.message);
       }
@@ -85,85 +93,156 @@ export function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-200 via-indigo-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 animate-fade-in">
-      <div className="w-full max-w-md p-8 bg-white/40 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-2xl transition-all duration-300">
-        <h2 className="text-3xl font-extrabold text-center text-black dark:text-white mb-6 animate-bounce">
-          {isLoggedIn ? `Welcome, ${userName}` : "Login"}
-        </h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 py-12 px-4">
+      <div className="max-w-md mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mb-4 animate-pulse-glow">
+            🔐
+          </div>
+          <h1 className="text-4xl font-bold mb-4">
+            <span className="gradient-text">{isLoggedIn ? `Welcome Back!` : "Sign In"}</span>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            {isLoggedIn ? `Hello, ${userName}` : "Access your TracePoint account"}
+          </p>
+        </div>
 
-        {isLoggedIn ? (
-          <>
-            <p className="text-center text-green-700 dark:text-green-300 mb-4">
-              You are already logged in.
-            </p>
-            <button
-              onClick={handleLogout}
-              className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            {!loginMode && (
-              <div className="flex flex-col space-y-4">
+        {/* Main Card */}
+        <div className="card p-8">
+          {isLoggedIn ? (
+            <div className="text-center space-y-6">
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                <p className="text-green-800 dark:text-green-300 font-medium">
+                  ✓ You are successfully logged in
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
                 <button
-                  onClick={() => setLoginMode("user")}
-                  className="w-full py-2 px-4 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+                  onClick={() => navigate('/view-found')}
+                  className="btn-primary flex items-center justify-center space-x-2"
                 >
-                  Login as User
+                  <span>🔍</span>
+                  <span>Browse Items</span>
                 </button>
                 <button
-                  onClick={goToAdminLogin}
-                  className="w-full py-2 px-4 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition"
+                  onClick={() => navigate('/report-lost')}
+                  className="btn-secondary flex items-center justify-center space-x-2"
                 >
-                  Login as Admin
+                  <span>📢</span>
+                  <span>Report Lost</span>
                 </button>
               </div>
-            )}
 
-            {loginMode === "user" && (
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-white/70 dark:bg-white/20 text-black dark:text-white placeholder-black dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="flex gap-4">
+              <button
+                onClick={handleLogout}
+                className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:from-red-600 hover:to-pink-700 hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                🚪 Logout
+              </button>
+            </div>
+          ) : (
+            <>
+              {!loginMode ? (
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-center text-gray-800 dark:text-white mb-6">
+                    Choose Login Type
+                  </h3>
+                  
                   <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`w-full py-2 px-4 rounded-lg ${
-                      isLoading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600"
-                    } text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-300`}
+                    onClick={() => setLoginMode("user")}
+                    className="w-full btn-primary flex items-center justify-center space-x-3 text-lg py-4"
                   >
-                    {isLoading ? "Logging..." : "Login"}
+                    <span>👤</span>
+                    <span>Continue as User</span>
+                    <span>→</span>
                   </button>
+                  
                   <button
-                    type="button"
-                    onClick={() => setLoginMode("")}
-                    className="w-full py-2 px-4 rounded-lg bg-gray-400 text-white font-semibold hover:bg-gray-500 transition"
+                    onClick={goToAdminLogin}
+                    className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:from-purple-700 hover:to-indigo-700 hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3 text-lg"
                   >
-                    Back
+                    <span>🔒</span>
+                    <span>Admin Access</span>
+                    <span>→</span>
                   </button>
                 </div>
-              </form>
-            )}
-          </>
-        )}
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      📧 Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      onChange={handleChange}
+                      required
+                      className="input-style"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      🔑 Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Enter your password"
+                      onChange={handleChange}
+                      required
+                      className="input-style"
+                    />
+                  </div>
+
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="flex-1 btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <span>Signing In...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>🚀</span>
+                          <span>Sign In</span>
+                        </>
+                      )}
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setLoginMode("")}
+                      className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300"
+                    >
+                      Back
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Sign Up Link */}
+              <div className="mt-6 text-center">
+                <p className="text-gray-600 dark:text-gray-400">
+                  Don't have an account?{' '}
+                  <button
+                    onClick={() => navigate('/signup')}
+                    className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+                  >
+                    Create one here
+                  </button>
+                </p>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

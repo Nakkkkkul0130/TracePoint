@@ -1,9 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+const getBaseURL = () => {
+  const localURL = "http://localhost:5000";
+  const prodURL = "https://tracepoint-usj3.onrender.com";
+  return window.location.hostname === 'localhost' ? localURL : prodURL;
+};
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [isLoading, setIsLoading] = useState(true);
+  const BASE_URL = getBaseURL();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/admin/lost-items`, {
+          method: "GET",
+          credentials: "include",
+        });
+        
+        if (res.ok) {
+          // Already logged in, redirect to dashboard
+          navigate("/admin/dashboard");
+        }
+      } catch (error) {
+        console.log("Not authenticated");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    checkAuth();
+  }, [navigate, BASE_URL]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -13,7 +43,7 @@ const AdminLogin = () => {
   e.preventDefault();
 
   try {
-    const res = await fetch("https://tracepoint-usj3.onrender.com/admin/login", {
+    const res = await fetch(`${BASE_URL}/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", //  required for sending cookies
@@ -34,6 +64,14 @@ const AdminLogin = () => {
   }
 };
 
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-tr from-gray-100 via-blue-200 to-gray-300">
+        <div className="text-xl">Checking authentication...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-tr from-gray-100 via-blue-200 to-gray-300">

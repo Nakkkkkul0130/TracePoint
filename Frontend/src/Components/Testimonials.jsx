@@ -58,43 +58,89 @@ export function Testimonials() {
   };
 
   return (
-    <section className="bg-gradient-to-r from-sky-100 to-indigo-100 py-16 text-center">
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-4xl font-extrabold mb-10 text-gray-800"
-      >
-        What Our Users Say
-      </motion.h2>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl relative border border-gray-200"
-      >
-        <img
-          src={testimonials[index].image}
-          alt={testimonials[index].name}
-          className="w-24 h-24 mx-auto rounded-full mb-4 border-4 border-blue-400 object-cover shadow-md"
-        />
-        <p className="text-gray-700 italic text-lg">"{testimonials[index].text}"</p>
-        <h3 className="mt-4 font-semibold text-blue-700 text-xl">{testimonials[index].name}</h3>
+    <section className="py-20 px-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl font-bold mb-4">
+            <span className="gradient-text">Success Stories</span>
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Real experiences from our community members who found their lost items
+          </p>
+        </motion.div>
 
-        {/* Navigation Buttons */}
-        <button
-          onClick={prevTestimonial}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white text-blue-600 border border-blue-400 p-2 rounded-full shadow-md hover:bg-blue-100"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        <button
-          onClick={nextTestimonial}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white text-blue-600 border border-blue-400 p-2 rounded-full shadow-md hover:bg-blue-100"
-        >
-          <ChevronRight size={24} />
-        </button>
-      </motion.div>
+        <div className="relative max-w-4xl mx-auto">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.5 }}
+            className="card p-8 md:p-12 text-center relative"
+          >
+            {/* Quote Icon */}
+            <div className="text-6xl text-blue-200 dark:text-blue-800 mb-6">"
+            </div>
+
+            {/* Profile Image */}
+            <div className="relative inline-block mb-6">
+              <img
+                src={testimonials[index].image}
+                alt={testimonials[index].name}
+                className="w-20 h-20 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg"
+              />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">✓</span>
+              </div>
+            </div>
+
+            {/* Testimonial Text */}
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 italic mb-6 leading-relaxed">
+              {testimonials[index].text}
+            </p>
+
+            {/* Name */}
+            <h3 className="text-xl font-bold gradient-text">
+              {testimonials[index].name}
+            </h3>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevTestimonial}
+              className="absolute top-1/2 -left-6 transform -translate-y-1/2 w-12 h-12 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="absolute top-1/2 -right-6 transform -translate-y-1/2 w-12 h-12 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </motion.div>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center mt-8 space-x-2">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  i === index
+                    ? 'bg-blue-600 w-8'
+                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

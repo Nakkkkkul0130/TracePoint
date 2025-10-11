@@ -8,21 +8,31 @@ require("dotenv").config();
 const { Server } = require("socket.io");
 const connectDB = require("./db");
 
+// Import routes
 const authRoutes = require("./LoginauthRoutes");
 const emailRoutes = require("./emailService");
 const reportLostRoutes = require("./reportLostRoutes");
 const foundItemRoutes = require("./foundItemRoutes");
+const foundRoutes = require("./routes/foundRoutes");
 const adminRoutes = require("./adminRoutes");
-const messageRoutes = require("./messageRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000", 
+  "https://trace-point.vercel.app",
+  "https://tracepoint.vercel.app",
+  process.env.CLIENT_URL
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "https://trace-point.vercel.app",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   },
 });
@@ -30,7 +40,7 @@ const io = new Server(server, {
 connectDB();
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "https://trace-point.vercel.app",
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(cookieParser());
@@ -43,6 +53,7 @@ app.use("/auth", authRoutes);             // Login, signup, verify-token
 app.use("/email", emailRoutes);           // Email service
 app.use("/lost", reportLostRoutes);           
 app.use("/view-found", foundItemRoutes);  
+app.use("/found", foundRoutes);
 app.use("/", adminRoutes);                
 app.use(messageRoutes);                   
 
@@ -75,9 +86,18 @@ io.on("connection", (socket) => {
     console.log(` User joined room: ${roomId}`);
   });
 
+  socket.on("leaveRoom", (roomId) => {
+    socket.leave(roomId);
+    console.log(` User left room: ${roomId}`);
+  });
+
   socket.on("sendMessage", (message) => {
     const roomId = message.itemId;
-    io.to(roomId).emit("receiveMessage", message);
+    socket.to(roomId).emit("receiveMessage", message);
+  });
+
+  socket.on("typing", ({ itemId, userId, isTyping }) => {
+    socket.to(itemId).emit("userTyping", { userId, isTyping });
   });
 
   socket.on("disconnect", () => {

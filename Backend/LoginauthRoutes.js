@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("./User");
+const User = require("./models/User");
 
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
@@ -20,7 +20,7 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({ name, contact, email, password: hashedPassword });
 
     await newUser.save();
-    res.status(201).json({ message: "Signup successful!" });
+    res.status(201).json({ message: "Signup successful! Please login with your credentials." });
   } catch (error) {
     res.status(500).json({ message: "Error signing up", error: error.message });
   }
