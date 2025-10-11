@@ -20,6 +20,7 @@ Built with a clean and responsive UI using **Tailwind CSS**, **Framer Motion**, 
 - 📥 **Message History** per item/user
 - 📷 **Image Upload** via Cloudinary
 - 📱 **Responsive Design** - Works on all devices
+- ⏳ **Engaging Loading Screen** - Interactive loading with helpful tips
 
 ### 🛠️ For Admin
 
@@ -201,6 +202,7 @@ TracePoint/
 - **Dark/Light Theme:** User preference support
 - **Smooth Animations:** Framer Motion integration
 - **Intuitive Navigation:** Clear user flow and guidance
+- **Loading Experience:** Engaging loading screen with tips and progress
 
 ---
 

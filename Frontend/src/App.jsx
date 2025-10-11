@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
 import Features from "./Components/Features";
@@ -15,6 +16,7 @@ import About from "./Components/About";
 import ChatRoom from "./Components/ChatRoom";
 import Dashboard from "./Components/Dashboard";
 import ReportFound from "./Components/ReportFound";
+import LoadingScreen from "./Components/LoadingScreen";
 
 import AdminLogin from "./Components/AdminLogin";
 import AdminDashboard from "./Components/AdminDashboard";
@@ -35,27 +37,46 @@ function HomePage() {
 }
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time for resources
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // Minimum 3 seconds loading
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/report-lost" element={<ReportLost />} />
-        <Route path="/report-found" element={<ReportFound />} />
-        <Route path="/view-found" element={<ViewFound />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/statistics" element={<Statistics />} />
-        <Route path="/testimonials" element={<Testimonials />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/chat/:itemId/:receiverId" element={<ChatRoom />} />
-        
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/inbox" element={<Inbox />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <LoadingScreen key="loading" onLoadingComplete={() => setIsLoading(false)} />
+        ) : (
+          <div key="app">
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/report-lost" element={<ReportLost />} />
+              <Route path="/report-found" element={<ReportFound />} />
+              <Route path="/view-found" element={<ViewFound />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/statistics" element={<Statistics />} />
+              <Route path="/testimonials" element={<Testimonials />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/chat/:itemId/:receiverId" element={<ChatRoom />} />
+              
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/inbox" element={<Inbox />} />
+            </Routes>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
