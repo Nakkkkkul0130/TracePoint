@@ -1,6 +1,8 @@
 const Message = require("../models/Message");
 const ReportLostItem = require("../models/ReportLostItem");
+const ReportFoundItem = require("../models/ReportFoundItem");
 const User = require("../models/User");
+const ItemVerification = require("../utils/itemVerification");
 
 // Get messages for a specific item
 const getMessages = async (req, res) => {
@@ -48,12 +50,18 @@ const sendMessage = async (req, res) => {
   }
 };
 
-// Send claim request
+// Send claim request with enhanced verification
 const sendClaimRequest = async (req, res) => {
   const { itemId, receiverId, verificationCode } = req.body;
   
   try {
-    // Find the user's lost item with matching verification code
+    // Step 1: Get the found item details
+    const foundItem = await ReportFoundItem.findById(itemId);
+    if (!foundItem) {
+      return res.status(404).json({ message: "Found item not found" });
+    }
+    
+    // Step 2: Find the user's lost item with matching verification code
     const userLostItem = await ReportLostItem.findOne({
       userId: req.user.id,
       verificationCode: verificationCode,
@@ -63,18 +71,61 @@ const sendClaimRequest = async (req, res) => {
     if (!userLostItem) {
       return res.status(400).json({ message: "Invalid verification code or no matching lost item found" });
     }
-
+    
+    // Step 3: Enhanced item matching verification
+    const matchResult = ItemVerification.verifyItemMatch(userLostItem, foundItem);
+    
+    if (!matchResult.isMatch) {
+      // Log suspicious activity
+      console.log('Suspicious claim attempt:', {
+        userId: req.user.id,
+        lostItem: userLostItem.itemName,
+        foundItem: foundItem.itemName,
+        score: matchResult.score,
+        conflicts: matchResult.conflicts
+      });
+      
+      return res.status(400).json({ 
+        message: "Items don't appear to match",
+        details: {
+          yourLostItem: userLostItem.itemName,
+          foundItem: foundItem.itemName,
+          matchScore: matchResult.score,
+          conflicts: matchResult.conflicts,
+          reason: matchResult.reason
+        }
+      });
+    }
+    
+    // Step 4: Check if verification code already used
+    const existingClaim = await Message.findOne({
+      'claimData.verificationCode': verificationCode,
+      'claimData.status': { $in: ['pending_admin_verification', 'approved'] }
+    });
+    
+    if (existingClaim) {
+      return res.status(400).json({ message: "This verification code has already been used for a claim" });
+    }
+    
+    // Step 5: Create enhanced claim message
     const message = new Message({
       senderId: req.user.id,
       receiverId,
       itemId,
-      content: `I believe this is my item. My lost item: ${userLostItem.itemName}`,
+      content: `I believe this is my item. My lost item: ${userLostItem.itemName}. Match confidence: ${matchResult.score}%`,
       messageType: 'claim_request',
       claimData: {
         status: 'pending_admin_verification',
         verificationCode: verificationCode,
         lostItemId: userLostItem._id,
         lostItemName: userLostItem.itemName,
+        foundItemName: foundItem.itemName,
+        matchScore: matchResult.score,
+        matchBreakdown: matchResult.breakdown,
+        conflicts: matchResult.conflicts,
+        lostDetails: matchResult.lostDetails,
+        foundDetails: matchResult.foundDetails,
+        requiresReview: matchResult.score < 80
       },
     });
     
@@ -84,7 +135,14 @@ const sendClaimRequest = async (req, res) => {
       .populate('senderId', 'name')
       .populate('receiverId', 'name');
     
-    res.status(201).json(populatedMessage);
+    res.status(201).json({
+      message: populatedMessage,
+      matchDetails: {
+        score: matchResult.score,
+        breakdown: matchResult.breakdown,
+        confidence: matchResult.score >= 80 ? 'High' : matchResult.score >= 60 ? 'Medium' : 'Low'
+      }
+    });
   } catch (error) {
     console.error("Failed to send claim request:", error);
     res.status(500).json({ message: "Failed to send claim request" });

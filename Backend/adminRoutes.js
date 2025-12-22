@@ -127,7 +127,7 @@ router.delete("/admin/found-items/:id", authenticateToken, verifyAdmin, async (r
   res.json({ message: "Found item deleted" });
 });
 
-// Get pending claims for admin verification
+// Get pending claims for admin verification with enhanced details
 router.get("/admin/pending-claims", authenticateToken, verifyAdmin, async (req, res) => {
   try {
     const Message = require("./models/Message");
@@ -137,9 +137,23 @@ router.get("/admin/pending-claims", authenticateToken, verifyAdmin, async (req, 
     })
     .populate('senderId', 'name')
     .populate('receiverId', 'name')
+    .populate('claimData.lostItemId')
     .sort('-createdAt');
     
-    res.json(pendingClaims);
+    // Enhance claims with verification analysis
+    const enhancedClaims = pendingClaims.map(claim => ({
+      ...claim.toObject(),
+      verificationAnalysis: {
+        riskLevel: claim.claimData.matchScore >= 80 ? 'Low' : 
+                  claim.claimData.matchScore >= 60 ? 'Medium' : 'High',
+        autoRecommendation: claim.claimData.matchScore >= 80 ? 'APPROVE' : 
+                           claim.claimData.matchScore >= 60 ? 'REVIEW' : 'REJECT',
+        conflictCount: claim.claimData.conflicts?.length || 0,
+        hasConflicts: (claim.claimData.conflicts?.length || 0) > 0
+      }
+    }));
+    
+    res.json(enhancedClaims);
   } catch (error) {
     console.error("Pending claims error:", error);
     res.status(500).json({ message: "Failed to fetch pending claims" });

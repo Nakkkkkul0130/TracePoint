@@ -42,6 +42,31 @@ const messageSchema = new mongoose.Schema({
       ref: "ReportLostItem",
     },
     lostItemName: String,
+    foundItemName: String,
+    matchScore: Number,
+    matchBreakdown: {
+      color: Number,
+      condition: Number,
+      accessories: Number,
+      marks: Number,
+      description: Number
+    },
+    conflicts: [String],
+    lostDetails: {
+      colors: [String],
+      condition: String,
+      accessories: [String],
+      marks: [String],
+      size: String
+    },
+    foundDetails: {
+      colors: [String],
+      condition: String,
+      accessories: [String],
+      marks: [String],
+      size: String
+    },
+    requiresReview: Boolean,
     adminVerifiedAt: Date,
   },
 }, {

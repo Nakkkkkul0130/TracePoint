@@ -152,15 +152,40 @@ export default function ChatRoom() {
       });
 
       if (response.ok) {
-        const claimMessage = await response.json();
-        // Immediately add claim message to local state
+        const result = await response.json();
+        const claimMessage = result.message || result;
+        
+        // Add claim message to local state
         setMessages(prev => [...prev, claimMessage]);
         socket.emit("sendMessage", claimMessage);
         setShowClaimModal(false);
-        alert('Claim request sent successfully! Admin will verify your claim.');
+        
+        // Show match details if available
+        if (result.matchDetails) {
+          const { score, confidence } = result.matchDetails;
+          alert(`Claim request sent successfully!\n\nMatch Confidence: ${confidence} (${score}%)\n\nAdmin will verify your claim by reviewing the conversation.`);
+        } else {
+          alert('Claim request sent successfully! Admin will verify your claim.');
+        }
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to send claim request');
+        
+        // Handle detailed error response
+        if (error.details) {
+          const { yourLostItem, foundItem, matchScore, conflicts } = error.details;
+          let errorMessage = `Claim rejected - Items don't appear to match\n\n`;
+          errorMessage += `Your lost item: ${yourLostItem}\n`;
+          errorMessage += `Found item: ${foundItem}\n`;
+          errorMessage += `Match score: ${matchScore}%\n\n`;
+          
+          if (conflicts && conflicts.length > 0) {
+            errorMessage += `Conflicts detected:\n${conflicts.map(c => `• ${c}`).join('\n')}`;
+          }
+          
+          alert(errorMessage);
+        } else {
+          alert(error.message || 'Failed to send claim request');
+        }
       }
     } catch (error) {
       console.error("Failed to send claim request:", error);

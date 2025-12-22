@@ -382,12 +382,83 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 {pendingClaims.map((claim) => (
                   <div key={claim._id} className="bg-white rounded-xl shadow-lg p-6">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-blue-700 mb-2">
-                          Claim by {claim.senderId.name}
-                        </h3>
-                        <p className="text-gray-600 mb-2">{claim.content}</p>
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="text-xl font-semibold text-blue-700">
+                            Claim by {claim.senderId.name}
+                          </h3>
+                          {claim.verificationAnalysis && (
+                            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                              claim.verificationAnalysis.riskLevel === 'Low' ? 'bg-green-100 text-green-800' :
+                              claim.verificationAnalysis.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {claim.verificationAnalysis.riskLevel} Risk
+                            </span>
+                          )}
+                        </div>
+                        
+                        <p className="text-gray-600 mb-3">{claim.content}</p>
+                        
+                        {/* Enhanced Verification Details */}
+                        {claim.claimData && (
+                          <div className="bg-gray-50 rounded-lg p-4 mb-3">
+                            <h4 className="font-semibold text-gray-800 mb-2">Verification Analysis</h4>
+                            
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <p><strong>Lost Item:</strong> {claim.claimData.lostItemName}</p>
+                                <p><strong>Found Item:</strong> {claim.claimData.foundItemName}</p>
+                                <p><strong>Match Score:</strong> 
+                                  <span className={`ml-1 font-semibold ${
+                                    claim.claimData.matchScore >= 80 ? 'text-green-600' :
+                                    claim.claimData.matchScore >= 60 ? 'text-yellow-600' :
+                                    'text-red-600'
+                                  }`}>
+                                    {claim.claimData.matchScore}%
+                                  </span>
+                                </p>
+                              </div>
+                              
+                              {claim.claimData.matchBreakdown && (
+                                <div>
+                                  <p><strong>Breakdown:</strong></p>
+                                  <ul className="text-xs space-y-1">
+                                    <li>Color: {claim.claimData.matchBreakdown.color}%</li>
+                                    <li>Condition: {claim.claimData.matchBreakdown.condition}%</li>
+                                    <li>Accessories: {claim.claimData.matchBreakdown.accessories}%</li>
+                                    <li>Marks: {claim.claimData.matchBreakdown.marks}%</li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Conflicts */}
+                            {claim.claimData.conflicts && claim.claimData.conflicts.length > 0 && (
+                              <div className="mt-3 p-2 bg-red-50 rounded border border-red-200">
+                                <p className="text-red-800 font-semibold text-sm mb-1">Conflicts Detected:</p>
+                                <ul className="text-red-700 text-xs space-y-1">
+                                  {claim.claimData.conflicts.map((conflict, idx) => (
+                                    <li key={idx}>• {conflict}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {/* Auto Recommendation */}
+                            {claim.verificationAnalysis && (
+                              <div className={`mt-3 p-2 rounded text-sm ${
+                                claim.verificationAnalysis.autoRecommendation === 'APPROVE' ? 'bg-green-50 text-green-800' :
+                                claim.verificationAnalysis.autoRecommendation === 'REVIEW' ? 'bg-yellow-50 text-yellow-800' :
+                                'bg-red-50 text-red-800'
+                              }`}>
+                                <strong>Recommendation:</strong> {claim.verificationAnalysis.autoRecommendation}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
                         <div className="text-sm text-gray-500">
                           <p>📧 Claimer: {claim.senderId.name}</p>
                           <p>📧 Item Reporter: {claim.receiverId.name}</p>
@@ -395,6 +466,7 @@ export default function AdminDashboard() {
                           <p>📅 Claim Date: {new Date(claim.createdAt).toLocaleDateString()}</p>
                         </div>
                       </div>
+                      
                       <div className="flex flex-col space-y-2">
                         <button
                           onClick={() => viewChat(claim.itemId)}
